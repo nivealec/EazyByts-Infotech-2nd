@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products Inventory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css"/>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Products Inventory</h1>
+
+        <!-- Product Form -->
+        <div class="card">
+            <div class="card-header">
+                Add Product
+            </div>
+            <div class="card-body">
+                <form id="productForm" action="/api/products/addProduct" method="post">
+                    <div class="form-group">
+                        <label for="productName">Product Name:</label>
+                        <input type="text" id="productName" name="productName" class="form-control" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" class="form-control" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode">Barcode:</label>
+                        <input type="text" id="barcode" name="barcode" class="form-control" required/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product List -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Product List
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Barcode</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productList">
+                        <!-- Product rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#productForm').submit(function(event) {
+                event.preventDefault();
+
+                var formData = {
+                    productName: $('#productName').val(),
+                    description: $('#description').val(),
+                    barcode: $('#barcode').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/products/addProduct',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        console.log('Product added successfully');
+                        // Optionally update UI or show success message
+                    },
+                    error: function(error) {
+                        console.error('Error adding product:', error);
+                        // Optionally handle error or show error message
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
